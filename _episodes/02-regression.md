@@ -73,6 +73,10 @@ plt.show()
 
 ![Inspection of our dataset](../fig/regression_inspect.png)
 
+> ## Non-Interactive Error?
+> If you get an error along the lines of `UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown`, then you don't have a GUI interface for Python installed. Exit the Python interpreter and try `pip install PyQt6`.
+{: .callout}
+
 
 In this regression example we will create a Linear Regression model that will try to predict `y` values based upon `x` values.
 
@@ -98,6 +102,10 @@ def pre_process_linear(x, y):
     return x_data, y_data
 ~~~
 {: .language-python}
+
+> ## Reshaping?
+> As `x` and `y` are 1-d vectors, we use `reshape(-1, 1)` to convert them into matricies of the same length (`-1`), 1-element wide (`1`).
+{: .info}
 
 Next we'll define a model, and train it on the pre-processed data. We'll also inspect the trained model parameters `m` and `c`:
 ~~~

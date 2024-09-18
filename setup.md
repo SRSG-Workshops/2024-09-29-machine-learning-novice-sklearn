@@ -7,9 +7,10 @@ title: Setup
 
 You will need a terminal, Python 3.8+, and the ability to create Python virtual environments.
 
-## Packages
+### Optional
 
-You will need the MatPlotLib, Pandas, Numpy and OpenCV packages. 
+It's recommended to have a code editor or Integrated Development Environment. Examples include **Spyder**, **VSCode/Visual Studio Code** or **PyCharm**. [Visual Studio Code](https://code.visualstudio.com/download) is lightweight and easy to install, and available on Window, Mac and Linux.
+
 
 # Setup
 
@@ -22,8 +23,8 @@ cd workshop-ml
 {: .language-bash}
 
 ## Creating a new Virtual Environment
-We'll install the prerequisites in a virtual environment, to prevent them from cluttering up your Python environment and causing conflicts.
-First, create a new directory and ent
+You will need the **Numpy**, **Pandas**, **MatPlotLib**, **Seaborn** and **OpenCV** packages. 
+We'll install these prerequisites in a virtual environment, to prevent them from cluttering up your Python environment or conflicting with any specific versions you have installed already.
 
 To create a new virtual environment for the project, open the terminal and type:
 
@@ -32,8 +33,9 @@ python3 -m venv venv
 ~~~
 {: .language-bash}
 
+> ## Missing Module?
 > If you're on Linux and this doesn't work, try installing `python3-venv` using your package manager, e.g. `sudo apt-get install python3-venv`.
-{: .info}
+{: .callout}
 
 ## Installing your prerequisites
 
@@ -41,27 +43,10 @@ Activate your virtual environment, and install the prerequisites:
 
 ~~~
 source venv/bin/activate
-pip install numpy pandas matplotlib opencv-python
+pip install numpy pandas matplotlib seaborn scikit-learn opencv-python
 ~~~
 {: .language-bash}
 
-## Download the data
-
-Create a sub directory called data in the directory, then download the the following files to this directory:
-
-* [Gapminder Life Expectancy Data](data/gapminder-life-expectancy.csv)
-* [World Bank GDP Data](data/worldbank-gdp.csv)
-* [World Bank GDP Data with outliers](data/worldbank-gdp-outliers.csv)
-
-If you are using a Mac or Linux system the following commands will download this:
-
-~~~
-mkdir data
-cd data
-wget https://southampton-rsg-training.github.io/2024-09-29-machine-learning-novice-sklearn/data/gapminder-life-expectancy.csv
-wget https://southampton-rsg-training.github.io/2024-09-29-machine-learning-novice-sklearn/data/worldbank-gdp.csv
-wget https://southampton-rsg-training.github.io/2024-09-29-machine-learning-novice-sklearn/data/worldbank-gdp-outliers.csv
-~~~
-{: .language-bash}
+You'll need to activate the environment again to use it at the start of the lesson.
 
 {% include links.md %}
