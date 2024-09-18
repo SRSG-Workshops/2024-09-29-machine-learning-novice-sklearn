@@ -1,9 +1,8 @@
 ---
 title: Setup
 ---
-# Requirements
 
-## Software
+## Software Requirements
 
 You will need a terminal, Python 3.8+, and the ability to create Python virtual environments.
 
@@ -12,7 +11,7 @@ You will need a terminal, Python 3.8+, and the ability to create Python virtual 
 It's recommended to have a code editor or Integrated Development Environment. Examples include **Spyder**, **VSCode/Visual Studio Code** or **PyCharm**. [Visual Studio Code](https://code.visualstudio.com/download) is lightweight and easy to install, and available on Window, Mac and Linux.
 
 
-# Setup
+## Setup
 
 Create a new directory for the workshop, then launch a terminal in it:
 
@@ -22,7 +21,7 @@ cd workshop-ml
 ~~~
 {: .language-bash}
 
-## Creating a new Virtual Environment
+### Creating a new Virtual Environment
 You will need the **Numpy**, **Pandas**, **MatPlotLib**, **Seaborn** and **OpenCV** packages. 
 We'll install these prerequisites in a virtual environment, to prevent them from cluttering up your Python environment or conflicting with any specific versions you have installed already.
 
@@ -37,7 +36,7 @@ python3 -m venv venv
 > If you're on Linux and this doesn't work, try installing `python3-venv` using your package manager, e.g. `sudo apt-get install python3-venv`.
 {: .callout}
 
-## Installing your prerequisites
+### Installing your prerequisites
 
 Activate your virtual environment, and install the prerequisites:
 

@@ -105,7 +105,7 @@ def pre_process_linear(x, y):
 
 > ## Reshaping?
 > As `x` and `y` are 1-d vectors, we use `reshape(-1, 1)` to convert them into matricies of the same length (`-1`), 1-element wide (`1`).
-{: .info}
+{: .callout}
 
 Next we'll define a model, and train it on the pre-processed data. We'll also inspect the trained model parameters `m` and `c`:
 ~~~

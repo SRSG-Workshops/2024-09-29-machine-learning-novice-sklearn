@@ -11,6 +11,7 @@ objectives:
 - "Understand why ensemble methods are useful."
 keypoints:
 - "Ensemble methods can be used to reduce under/over fitting training data."
+break: true
 ---
 
 # Ensemble methods
