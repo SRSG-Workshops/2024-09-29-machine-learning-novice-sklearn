@@ -3,18 +3,32 @@ title: "Unsupervised methods - Dimensionality reduction"
 teaching: 30
 exercises: 30
 questions:
-- How do we apply machine learning techniques to data with higher dimensions?
+- "How can we perform unsupervised learning with dimensionality reduction techniques such as Principle Component Analysis (PCA) and t-distributed Stochastic Neighbor Embedding (t-SNE)?"
 objectives:
-- "Recall that most data is inherently multidimensional."
+- "Recall that most data is inherently multidimensional"
 - "Understand that reducing the number of dimensions can simplify modelling and allow classifications to be performed."
-- "Apply Principle Component Analysis (PCA) and t-distributed Stochastic Neighbor Embedding (t-SNE) to reduce the dimensions of data."
-- "Evaluate the relative peformance of PCA and t-SNE in reducing data dimensionality."
+- "Recall that PCA is a popular technique for dimensionality reduction."
+- "Recall that t-SNE is another technique for dimensionality reduction."
+- "Apply PCA and t-SNE with Scikit Learn to an example dataset."
+- "Evaluate the relative peformance of PCA and t-SNE."
 keypoints:
 - "PCA is a linear dimensionality reduction technique for tabular data"
 - "t-SNE is another dimensionality reduction technique for tabular data that is more general than PCA"
 ---
 
-# Dimensionality reduction
+# Dimensionality Reduction
+Dimensionality reduction techniques involve the selection or transformation of input features to create a more concise representation of the data, thus enabling the capture of essential patterns and variations while reducing noise and redundancy. They are applied to "high-dimensional" datasets, or data containing many features/predictors.
+
+Dimensionality reduction techniques are useful in the context of machine learning problems for several reasons:
+
+1. **Avoids overfitting effects**: It can be difficult to find general trends in data when fitting a model to high-dimensional dataset. As the number of model coefficients begins to approach the number of observations used to train the model, we greatly increase our risk of simply memorizing the training data.
+2. **Pattern discovery**: They can reveal hidden patterns, clusters, or structures that might not be evident in the original high-dimensional space
+3. **Data visualization**: High-dimensional data can be challenging to visualize and interpret directly. Dimensionality reduction methods, such as Principal Component Analysis (PCA) or t-Distributed Stochastic Neighbor Embedding (t-SNE), project data onto a lower-dimensional space while preserving important patterns and relationships. This allows you to create 2D or 3D visualizations that can provide insights into the data's structure.
+
+The potential downsides of using dimensionality reduction techniques include:
+1. **Oversimplifications**: When we reduce dimensionality of our data, we are removing some information from the data. The goal is to remove only noise or uninteresting patterns of variation. If we remove too much, we may remove signal from the data and miss important/interesting relationships.
+2. **Complexity and parameter tuning**: Some dimensionality reduction techniques, such as t-SNE or autoencoders, can be complex to implement and require careful parameter tuning. Selecting the right parameters can be challenging and may not always lead to optimal results.
+3. **Interpretability**: Reduced-dimensional representations may be less interpretable than the original features. Understanding the meaning or significance of the new components or dimensions can be challenging, especially when dealing with complex models like neural networks.
 
 As seen in the last episode, general clustering algorithms work well with low-dimensional data. In this episode we see how higher-dimensional data, such as images of handwritten text or numbers, can be processed with dimensionality reduction techniques to make the datasets more accessible for other modelling techniques. The dataset we will be using is the Scikit-Learn subset of the Modified National Institute of Standards and Technology (MNIST) dataset.
 
@@ -75,68 +89,29 @@ features.head()
 ~~~
 {: .language-python}
 
-## Our goal: using dimensionality-reduction to help with machine learning
-
-As humans we are pretty good at object and pattern recognition. We can look at the images above, inspect the intensity and position pixels relative to other pixels, and pretty quickly make an accurate guess at what the image shows. As humans we spends much of our younger lives learning these spatial relations, and so it stands to reason that computers can also extract these relations. Let's see if it is possible to use unsupervised clustering techniques to pull out relations in our MNIST dataset of number images.
-
-
-> ## Exercise: Try to visually inspect the dataset and features for correlations
-> As we did for previous datasets, lets visually inspect relationships between our features/pixels. Try and investigate the following pixels for relations (written "row_column"): 0_4, 1_4, 2_4, and 3_4.
-> 
-> > ## Solution
-> > ~~~
-> > 
-> > print(features.iloc[0])
-> > image_1D = features.iloc[0]
-> > image_2D = np.array(image_1D).reshape(-1,8)
-> > 
-> > plt.imshow(image_2D,cmap="gray_r")
-> > # these points are the pixels we will investigate
-> > # pixels 0,1,2,3 of row 4 of the image
-> > plt.plot([0,1,2,3],[4,4,4,4],"rx")
-> > plt.show()
-> > ~~~
-> > {: .language-python}
-> >
-> > ![SKLearn image with highlighted pixels](../fig/mnist_pairplot_pixels.png)
-> > 
-> > ~~~
-> > import seaborn as sns
-> > 
-> > # make a temporary copy of data for plotting here only
-> > seaborn_data = features
-> > 
-> > # add labels for pairplot color coding
-> > seaborn_data["labels"] = labels
-> > 
-> > # make a short list of N features for plotting N*N figures
-> > # 4**2 = 16 plots, whereas 64**2 is over 4000!
-> > feature_subset = []
-> > for i in range(4):
-> >     feature_subset.append("pixel_"+str(i)+"_4")
-> > 
-> > sns.pairplot(seaborn_data, vars=feature_subset, hue="labels", 
-> >              palette=sns.mpl_palette("Spectral", n_colors=10))
-> > ~~~
-> > {: .language-python}
-> > 
-> > ![SKLearn image with highlighted pixels](../fig/mnist_pairplot.png)
-> > 
-> > As we can see the dataset relations are far more complex than our previous examples. The histograms show that some numbers appear in those pixel positions more than others, but the `feature_vs_feature` plots are quite messy to try and decipher. There are gaps and patches of colour suggesting that there is some kind of structure there, but it's far harder to inspect than the penguin data. We can't easily see definitive clusters in our 2D representations, and we know our clustering algorithms will take a long time to try and crunch 64 dimensions at once, so let's see if we can represent our 64D data in fewer dimensions.
-> > 
-> {: .solution}
-{: .challenge}
-
 # Dimensionality reduction with Scikit-Learn
 We will look at two commonly used techniques for dimensionality reduction: Principal Component Analysis (PCA) and t-distributed Stochastic Neighbor Embedding (t-SNE). Both of these techniques are supported by Scikit-Learn.
 
 ### Principal Component Analysis (PCA)
 
-PCA allows us to replace our 64 features with a smaller number of dimensional representations that retain the majority of our variance/relational data. Using Scikit-Learn lets apply PCA in a relatively simple way.
+PCA is a data transformation technique that allows you to represent variance across variables more efficiently.
+
+Using Scikit-Learn lets apply PCA in a relatively simple way.
+
+
+Specifically, PCA does rotations of data matrix (N observations x C features) in a two dimensional array to decompose the array into vectors that are orthogonal and can be ordered according to the amount of information/variance they carry. After transforming the data with PCA, each new variable (or pricipal component) can be thought of as a linear combination of several of the original variables. 
+
+1. PCA, at its core, is a data transformation technique
+2. Allows us to more efficiently represent the variability present in the data
+3. It does this by linearly combining variables into new variables called principal component scores
+4. The new transformed variables are all "orthogonal" to one another, meaning there is no redundancy or correlation between variables.
 
 For more in depth explanations of PCA please see the following links:
 * [https://builtin.com/data-science/step-step-explanation-principal-component-analysis](https://builtin.com/data-science/step-step-explanation-principal-component-analysis)
 * [https://scikit-learn.org/stable/modules/decomposition.html#pca](https://scikit-learn.org/stable/modules/decomposition.html#pca)
+
+In our digits example PCA allows us to reduce our 64 features in the MNIST dataset images to a smaller number of dimensional representations, while still retaining the 
+majority of our variance/relational data to the point that we can still distinugish the individual digits.
 
 Let's apply PCA to the MNIST dataset and retain the two most-major components: 
 
